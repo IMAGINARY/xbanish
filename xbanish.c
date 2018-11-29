@@ -113,7 +113,7 @@ main(int argc, char *argv[])
 		legacy = 1;
 		snoop_legacy(DefaultRootWindow(dpy));
 	}
-
+	hide_cursor();
 	for (;;) {
 		cookie = &e.xcookie;
 		XNextEvent(dpy, &e);
@@ -209,6 +209,10 @@ main(int argc, char *argv[])
 				printf("unknown event type %d\n", e.type);
 		}
 	}
+	if (hiding) {
+		XFixesShowCursor(dpy, DefaultRootWindow(dpy));
+		hiding = 0;
+	}
 }
 
 void
@@ -231,7 +235,7 @@ show_cursor(void)
 		printf("mouse moved, %sunhiding cursor\n",
 		    (hiding ? "" : "already "));
 
-	if (hiding) {
+	if (hiding && 0) { // disable cursor showing
 		XFixesShowCursor(dpy, DefaultRootWindow(dpy));
 		hiding = 0;
 	}
